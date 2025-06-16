@@ -916,7 +916,7 @@ function LinuxLib.Tab(config)
         TitleFrame.Visible = true
         TabText.TextColor3 = Color3.fromRGB(255, 255, 255)
         TabBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-        TabBtn.BackgroundTransparency = 1
+        TabBtn.BackgroundTransparency = 0
         TabBtn.BorderSizePixel = 1
         TabBtn.BorderColor3 = Color3.fromRGB(39, 39, 42)
         
@@ -984,7 +984,7 @@ function LinuxLib.Tab(config)
         TitleFrame.Visible = true
         TabText.TextColor3 = Color3.fromRGB(255, 255, 255)
         TabBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-        TabBtn.BackgroundTransparency = 1
+        TabBtn.BackgroundTransparency = 0
         TabBtn.BorderSizePixel = 1
         TabBtn.BorderColor3 = Color3.fromRGB(39, 39, 42)
         
@@ -1045,13 +1045,21 @@ function LinuxLib.Tab(config)
             ZIndex = 2
         })
         
+        BtnFrame.MouseEnter:Connect(function()
+            TweenService:Create(Btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        BtnFrame.MouseLeave:Connect(function()
+            TweenService:Create(Btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+        end)
+        
         local buttonClicked = false
         Btn.MouseButton1Click:Connect(function()
             if not buttonClicked then
                 buttonClicked = true
-                TweenService:Create(BtnFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(120, 120, 120), BackgroundTransparency = 0.5}):Play()
+                TweenService:Create(BtnFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(15, 15, 15)}):Play()
                 task.wait(0.3)
-                TweenService:Create(BtnFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(21, 21, 21), BackgroundTransparency = 0}):Play()
+                TweenService:Create(BtnFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(21, 21, 21)}):Play()
                 buttonClicked = false
             end
             spawn(function() Linux:SafeCallback(config.Callback) end)
@@ -1144,6 +1152,19 @@ function LinuxLib.Tab(config)
         local State = config.Default or false
         Toggle:SetAttribute("State", State)
         
+        Toggle.MouseEnter:Connect(function()
+            TweenService:Create(ToggleText, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        Toggle.MouseLeave:Connect(function()
+            local currentState = Toggle:GetAttribute("State")
+            if currentState then
+                TweenService:Create(ToggleText, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+            else
+                TweenService:Create(ToggleText, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+            end
+        end)
+        
         local isToggling = false
         local function UpdateToggle(thisToggle)
             if isToggling then return end
@@ -1152,15 +1173,18 @@ function LinuxLib.Tab(config)
             local currentState = thisToggle:GetAttribute("State")
             local thisTrack = thisToggle:FindFirstChild("Track")
             local thisKnob = thisTrack and thisTrack:FindFirstChild("Knob")
+            local thisText = thisToggle:FindFirstChild("ToggleText")
             
-            if thisTrack and thisKnob then
+            if thisTrack and thisKnob and thisText then
                 local tween = TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
                 if currentState then
                     TweenService:Create(thisTrack, tween, {BackgroundColor3 = Color3.fromRGB(255, 105, 180)}):Play()
                     TweenService:Create(thisKnob, tween, {Position = UDim2.new(0, 20, 0.5, -7), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+                    TweenService:Create(thisText, tween, {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
                 else
                     TweenService:Create(thisTrack, tween, {BackgroundColor3 = Color3.fromRGB(17, 17, 18)}):Play()
                     TweenService:Create(thisKnob, tween, {Position = UDim2.new(0, 2, 0.5, -7), BackgroundColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+                    TweenService:Create(thisText, tween, {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
                 end
             end
             
@@ -1243,7 +1267,7 @@ function LinuxLib.Tab(config)
             AutoButtonColor = false
         })
         
-        Linux.Instance("TextLabel", {
+        local DropdownLabel = Linux.Instance("TextLabel", {
             Parent = DropdownButton,
             BackgroundTransparency = 1,
             Size = UDim2.new(0.6, 0, 1, 0),
@@ -1255,6 +1279,14 @@ function LinuxLib.Tab(config)
             TextXAlignment = Enum.TextXAlignment.Left,
             ZIndex = 2
         })
+        
+        Dropdown.MouseEnter:Connect(function()
+            TweenService:Create(DropdownLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        Dropdown.MouseLeave:Connect(function()
+            TweenService:Create(DropdownLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+        end)
         
         local Options = config.Options or {}
         local SelectedValue = config.Default or (Options[1] or "None")
@@ -1417,6 +1449,19 @@ function LinuxLib.Tab(config)
                         Parent = OptBtn,
                         CornerRadius = UDim.new(0, 4)
                     })
+                    
+                    OptBtn.MouseEnter:Connect(function()
+                        TweenService:Create(OptBtn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+                    end)
+                    
+                    OptBtn.MouseLeave:Connect(function()
+                        local currentSelected = IsMulti and table.find(SelectedValues, opt) or opt == SelectedValue
+                        if currentSelected then
+                            TweenService:Create(OptBtn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+                        else
+                            TweenService:Create(OptBtn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+                        end
+                    end)
                     
                     OptBtn.MouseButton1Click:Connect(function()
                         if IsMulti then
@@ -1581,6 +1626,14 @@ function LinuxLib.Tab(config)
             TextXAlignment = Enum.TextXAlignment.Left,
             ZIndex = 2
         })
+        
+        Slider.MouseEnter:Connect(function()
+            TweenService:Create(TitleLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        Slider.MouseLeave:Connect(function()
+            TweenService:Create(TitleLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+        end)
         
         local SliderBar = Linux.Instance("Frame", {
             Parent = Slider,
@@ -1816,7 +1869,7 @@ function LinuxLib.Tab(config)
             LayoutOrder = elementOrder
         })
         
-        Linux.Instance("TextLabel", {
+        local InputLabel = Linux.Instance("TextLabel", {
             Parent = Input,
             BackgroundTransparency = 1,
             Size = UDim2.new(0.6, 0, 1, 0),
@@ -1828,6 +1881,14 @@ function LinuxLib.Tab(config)
             TextXAlignment = Enum.TextXAlignment.Left,
             ZIndex = 2
         })
+        
+        Input.MouseEnter:Connect(function()
+            TweenService:Create(InputLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        Input.MouseLeave:Connect(function()
+            TweenService:Create(InputLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+        end)
         
         local InputIcon = Linux.Instance("ImageLabel", {
             Parent = Input,
@@ -2048,6 +2109,14 @@ function LinuxLib.Tab(config)
             ZIndex = 2
         })
         
+        LabelFrame.MouseEnter:Connect(function()
+            TweenService:Create(LabelText, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        LabelFrame.MouseLeave:Connect(function()
+            TweenService:Create(LabelText, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+        end)
+        
         local UpdateConnection = nil
         local lastUpdate = 0
         local updateInterval = 0.1
@@ -2173,7 +2242,7 @@ function LinuxLib.Tab(config)
             LayoutOrder = elementOrder
         })
         
-        Linux.Instance("TextLabel", {
+        local ParagraphTitle = Linux.Instance("TextLabel", {
             Parent = ParagraphFrame,
             BackgroundTransparency = 1,
             Size = UDim2.new(1, -20, 0, 26),
@@ -2201,13 +2270,23 @@ function LinuxLib.Tab(config)
             ZIndex = 2
         })
         
+        ParagraphFrame.MouseEnter:Connect(function()
+            TweenService:Create(ParagraphTitle, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+            TweenService:Create(Content, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        ParagraphFrame.MouseLeave:Connect(function()
+            TweenService:Create(ParagraphTitle, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+            TweenService:Create(Content, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(150, 150, 155)}):Play()
+        end)
+        
         Linux.Instance("UIPadding", {
             Parent = ParagraphFrame,
             PaddingBottom = UDim.new(0, 10)
         })
         
         local function SetTitle(newTitle)
-            ParagraphFrame:GetChildren()[3].Text = tostring(newTitle)
+            ParagraphTitle.Text = tostring(newTitle)
         end
         
         local function SetContent(newContent)
@@ -2261,7 +2340,7 @@ function LinuxLib.Tab(config)
             Thickness = 1
         })
         
-        Linux.Instance("TextLabel", {
+        local NotificationLabel = Linux.Instance("TextLabel", {
             Parent = NotificationFrame,
             BackgroundTransparency = 1,
             Size = UDim2.new(0.5, 0, 1, 0),
@@ -2287,6 +2366,16 @@ function LinuxLib.Tab(config)
             TextTruncate = Enum.TextTruncate.AtEnd,
             ZIndex = 2
         })
+        
+        NotificationFrame.MouseEnter:Connect(function()
+            TweenService:Create(NotificationLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+            TweenService:Create(NotificationText, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        NotificationFrame.MouseLeave:Connect(function()
+            TweenService:Create(NotificationLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+            TweenService:Create(NotificationText, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
         
         local function SetText(newText)
             NotificationText.Text = tostring(newText)
@@ -2327,7 +2416,7 @@ function LinuxLib.Tab(config)
             LayoutOrder = elementOrder
         })
         
-        Linux.Instance("TextLabel", {
+        local KeybindLabel = Linux.Instance("TextLabel", {
             Parent = KeybindFrame,
             BackgroundTransparency = 1,
             Size = UDim2.new(0.6, 0, 1, 0),
@@ -2339,6 +2428,14 @@ function LinuxLib.Tab(config)
             TextXAlignment = Enum.TextXAlignment.Left,
             ZIndex = 2
         })
+        
+        KeybindFrame.MouseEnter:Connect(function()
+            TweenService:Create(KeybindLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        KeybindFrame.MouseLeave:Connect(function()
+            TweenService:Create(KeybindLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+        end)
         
         local currentKey = config.Default or Enum.KeyCode.None
         local isCapturing = false
@@ -2457,7 +2554,7 @@ function LinuxLib.Tab(config)
             LayoutOrder = elementOrder
         })
         
-        Linux.Instance("TextLabel", {
+        local ColorpickerLabel = Linux.Instance("TextLabel", {
             Parent = ColorpickerFrame,
             BackgroundTransparency = 1,
             Size = UDim2.new(0.6, 0, 1, 0),
@@ -2469,6 +2566,14 @@ function LinuxLib.Tab(config)
             TextXAlignment = Enum.TextXAlignment.Left,
             ZIndex = 2
         })
+        
+        ColorpickerFrame.MouseEnter:Connect(function()
+            TweenService:Create(ColorpickerLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        end)
+        
+        ColorpickerFrame.MouseLeave:Connect(function()
+            TweenService:Create(ColorpickerLabel, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200, 200, 210)}):Play()
+        end)
         
         local currentColor = config.Default or Color3.fromRGB(255, 255, 255)
         local isPicking = false
@@ -2806,6 +2911,10 @@ function LinuxLib.Tab(config)
                     end
                 end
                 spawn(function() Linux:SafeCallback(config.Callback, currentColor) end)
+            end
+        end
+        
+        spawn(function() Linux:SafeCallback(config.
             end
         end
         
